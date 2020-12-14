@@ -1,0 +1,11 @@
+name: Currencies
+description: Currencies
+author: hazae41
+version: 1.0
+api-version: 1.16
+main: hazae41.currencies.Main
+commands:
+  "$":
+    aliases: [ "money" ]
+    description: Money
+    usage: /$ | /$ add | /$ get [amount]
