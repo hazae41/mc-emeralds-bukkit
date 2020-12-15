@@ -1,11 +1,11 @@
-name: Currencies
-description: Currencies
+name: Emeralds
+description: Emeralds
 author: hazae41
 version: 1.0
 api-version: 1.16
-main: hazae41.currencies.Main
+main: hazae41.emeralds.Main
 commands:
   "$":
-    aliases: [ "money" ]
+    aliases: [ "money", "emeralds" ]
     description: Money
-    usage: /$ | /$ add | /$ get [amount]
+    usage: /$

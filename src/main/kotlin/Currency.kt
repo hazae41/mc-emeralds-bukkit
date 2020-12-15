@@ -1,4 +1,4 @@
-package hazae41.currencies
+package hazae41.emeralds
 
 import net.milkbowl.vault.economy.EconomyResponse
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType.FAILURE
@@ -49,7 +49,6 @@ class Currency(
 
   override fun withdrawPlayer(player: OfflinePlayer?, amount: Double) = transaction(db) {
     val row = PlayerRow.getOrCreate(player!!.uniqueId)
-    player!!.setStatistic(Statistic.)
 
     if (row.amount >= amount) {
       row.amount -= amount

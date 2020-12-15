@@ -1,13 +1,17 @@
-package hazae41.currencies
+package hazae41.emeralds
 
+import hazae41.chestui.*
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Material.*
 import org.bukkit.entity.Player
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.ServicePriority.Normal
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.sql.Database
 import java.io.File
+
+lateinit var plugin: Main
 
 class Main : JavaPlugin() {
   val dbfile = File(dataFolder, "data.db")
@@ -17,112 +21,89 @@ class Main : JavaPlugin() {
     "org.sqlite.JDBC"
   )
 
+  lateinit var token: String
   lateinit var currency: Currency
 
   override fun onEnable() {
     super.onEnable()
+    plugin = this
 
     saveDefaultConfig()
 
     val ecoClz = Economy::class.java
-    val token = config.getString("name")!!
+
+    token = config.getString("name")!!
     currency = Currency(this, token)
 
     server.servicesManager
       .register(ecoClz, currency, this, Normal)
 
     getCommand("$")!!.apply {
-      setTabCompleter { sender, _, _, args ->
-        if (sender is Player)
-          sender.ontabcomplete(args)
-        else emptyList()
-      }
       setExecutor { sender, _, _, args ->
         if (sender is Player)
-          sender.oncommand(args)
+          oncommand(sender, args)
         else true
       }
     }
-
-
   }
 
-  
-  fun Player.openBank() {
-    server.createInventory(this, 6) {
+  fun oncommand(player: Player, args: Array<String>): Boolean {
+    player.open(player.Banks())
+    return true
+  }
 
+  fun Player.emeralds() = currency.getBalance(this).toInt()
+
+  fun createBanks(balance: Int): List<Inventory> {
+    val quotient = if (balance > 0) balance / 9 else 0
+    val remainder = if (balance > 0) balance % 9 else 0
+
+    var blocks: ItemStack? =
+      ItemStack(EMERALD_BLOCK, quotient)
+    var items: ItemStack? =
+      ItemStack(EMERALD, remainder)
+
+    val inventories = mutableListOf<Inventory>()
+
+    while (blocks != null || items != null) {
+      val title = "Bank #${inventories.size + 1}"
+
+      val inventory = server
+        .createInventory(null, 6 * 9, title)
+
+      if (blocks != null)
+        blocks = inventory.addItem(blocks)[0]
+      if (items != null)
+        items = inventory.addItem(items)[0]
+
+      inventories.add(inventory)
     }
+
+    return inventories
   }
 
-  fun Player.ontabcomplete(args: Array<String>): List<String> {
-    val operator = args.getOrNull(0)
-      ?: return listOf("add", "get")
+  fun Player.Banks(): GUI {
+    val balance = emeralds()
+    val banks = createBanks(balance)
 
-    if (operator == "add")
-      return emptyList()
+    return gui("$balance $token", 6) {
+      for (i in 0 until 6 * 9) {
+        val inventory = banks
+          .getOrNull(i) ?: break
 
-    if (operator == "get")
-      return listOf("1", "10", "100", "1000", "10000")
+        slot(i) {
+          item = item(CHEST) {
+            name = "Bank #${i + 1}"
+            val emeralds = inventory.emeralds()
+            lore = wrap("§a$emeralds $token")
+          }
 
-    return emptyList()
-  }
-
-  fun Player.oncommand(args: Array<String>): Boolean {
-    val operator = args.getOrNull(0)
-
-    if (operator == null) {
-      val balance = currency.getBalance(this)
-      sendMessage("$balance ${currency.name}")
-      return true
-    }
-
-    if (operator in listOf("+", "add")) {
-      val item = inventory.itemInMainHand
-      val damount = item.amount.toDouble()
-
-      when (item.type) {
-        EMERALD_BLOCK -> currency.depositPlayer(this, damount * 9)
-        EMERALD -> currency.depositPlayer(this, damount)
-        else -> {
-          sendMessage("Invalid type")
-          return true
+          onclick = { p ->
+            Bank(this@Banks, inventory)
+            p.openInventory(inventory)
+          }
         }
       }
-
-      inventory.setItemInMainHand(ItemStack(AIR))
-
-      return true
     }
-
-    if (operator in listOf("-", "get")) {
-      val balance = currency.getBalance(this).toInt()
-
-      var amount = args.getOrNull(1)
-        ?.toIntOrNull() ?: return false
-
-      amount = amount.coerceAtMost(balance)
-
-      val damount = amount.toDouble()
-
-      val transaction = currency.withdrawPlayer(this, damount)
-      if (!transaction.transactionSuccess()) return true
-
-      val quotient = amount / 9
-      val remainder = amount % 9
-
-      if (quotient > 0) {
-        val blocks = ItemStack(EMERALD_BLOCK, quotient)
-        world.dropItem(location, blocks)
-      }
-
-      if (remainder > 0) {
-        val items = ItemStack(EMERALD, remainder)
-        world.dropItem(location, items)
-      }
-
-      return true
-    }
-
-    return false
   }
 }
