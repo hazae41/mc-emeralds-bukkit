@@ -66,7 +66,7 @@ class Main : JavaPlugin() {
     val inventories = mutableListOf<Inventory>()
 
     while (blocks != null || items != null) {
-      val title = "Bank #${inventories.size + 1}"
+      val title = "#${inventories.size + 1}"
 
       val inventory = server
         .createInventory(null, 6 * 9, title)
@@ -93,7 +93,7 @@ class Main : JavaPlugin() {
 
         slot(i) {
           item = item(CHEST) {
-            name = "Bank #${i + 1}"
+            name = "#${i + 1}"
             val emeralds = inventory.emeralds()
             lore = wrap("§a$emeralds $token")
           }
