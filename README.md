@@ -4,6 +4,8 @@
 
 ### [Download Emeralds](https://github.com/saurusmc/emeralds-bukkit/raw/master/build/libs/emeralds-1.0.jar)
 
+### [Download ChestUI](https://github.com/saurusmc/emeralds-bukkit/raw/master/libs/chestui-3.1.jar)
+
 ### Features
 
 - Players can type `/$` or `/money` to open an inventory with all their emeralds
