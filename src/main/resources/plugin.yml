@@ -4,6 +4,7 @@ author: hazae41
 version: 1.0
 api-version: 1.16
 main: hazae41.emeralds.Main
+softdepend: [ Kotlin ]
 commands:
   "$":
     aliases: [ "money", "emeralds" ]
