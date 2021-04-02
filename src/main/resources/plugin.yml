@@ -1,0 +1,29 @@
+name: Emeralds
+description: Emeralds economy
+author: hazae41
+version: 2.0
+api-version: 1.16
+main: hazae41.emeralds.Plugin
+commands:
+  money:
+    aliases: [ "emeralds", "$" ]
+    permission: emeralds.open
+    description: Open your emeralds bank
+    usage: /money
+  givemoney:
+    description: Give emeralds to a player
+    permission: emeralds.give
+    usage: /givemoney <player> <amount>
+  takemoney:
+    description: Take emeralds from a player
+    permission: emeralds.take
+    usage: /takemoney <player> <amount>
+  balance:
+    description: View emeralds balance of a player
+    permission: emeralds.balance
+    usage: /balance [player]
+permissions:
+  emeralds.balance:
+    default: true
+  emeralds.open:
+    default: true
