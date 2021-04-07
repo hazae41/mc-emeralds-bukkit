@@ -20,9 +20,9 @@ public class GUI implements Listener {
     this.player = player;
     this.plugin = plugin;
 
-    int realBalance = plugin.emeralds.getOrZero(player);
+    int realBalance = (int) plugin.economy.getBalance(player);
 
-    String title = plugin.emeralds.format(realBalance);
+    String title = plugin.economy.format(realBalance);
     this.inventory = plugin.getServer().createInventory(null, 54, title);
 
     for (int i = 0; i < realBalance / 9; i++)
@@ -32,7 +32,7 @@ public class GUI implements Listener {
 
     recalculate();
 
-    EconomyResponse tx = plugin.emeralds.withdrawPlayer(player, this.balance);
+    EconomyResponse tx = plugin.economy.withdrawPlayer(player, this.balance);
     if (!tx.transactionSuccess()) throw new RuntimeException(tx.errorMessage);
 
     plugin.tempConfig.config.set(player.getUniqueId().toString(), balance);
@@ -77,7 +77,7 @@ public class GUI implements Listener {
 
     recalculate();
 
-    EconomyResponse tx = plugin.emeralds.depositPlayer(player, balance);
+    EconomyResponse tx = plugin.economy.depositPlayer(player, balance);
     if (!tx.transactionSuccess()) throw new RuntimeException(tx.errorMessage);
 
     plugin.tempConfig.config.set(player.getUniqueId().toString(), null);

@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.math.BigDecimal.ROUND_DOWN;
-import static net.milkbowl.vault.economy.EconomyResponse.ResponseType.FAILURE;
+import static net.milkbowl.vault.economy.EconomyResponse.ResponseType.NOT_IMPLEMENTED;
 
 @SuppressWarnings("deprecation")
 public abstract class Token implements Economy {
@@ -67,42 +67,42 @@ public abstract class Token implements Economy {
 
   @Override
   public EconomyResponse deleteBank(String name) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse bankBalance(String name) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse bankHas(String name, double amount) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse bankWithdraw(String name, double amount) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse bankDeposit(String name, double amount) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse createBank(String name, OfflinePlayer player) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse isBankOwner(String name, OfflinePlayer player) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override
   public EconomyResponse isBankMember(String name, OfflinePlayer player) {
-    return new EconomyResponse(0, 0, FAILURE, "Not supported");
+    return new EconomyResponse(0, 0, NOT_IMPLEMENTED, "Not supported");
   }
 
   @Override

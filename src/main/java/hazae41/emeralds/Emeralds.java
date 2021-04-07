@@ -20,6 +20,7 @@ public class Emeralds extends Token {
 
   public Emeralds(Plugin plugin, String name) {
     super(name, 0);
+    
     this.plugin = plugin;
 
     try {
